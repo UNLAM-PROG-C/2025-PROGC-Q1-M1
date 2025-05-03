@@ -17,21 +17,16 @@ def player(id):
     sys.stdout.write(f"Jugador {id} finaliza con {points} puntos.\n")
 
 def main():
-    children = [] #Creamos una lista para todos los procesos hijo
+    children = []
 
     for i in range(PLAYER):
-
-        #Creamos un nuevo proceso hijo para cada jugador
         pid = os.fork()
         if pid == 0:
-            # Es el proceso hijo
             player(i+1)
-            os._exit(os.EX_OK)  # Finalizamos el proceso hijo
+            os._exit(os.EX_OK)  
         else:
-            # Es el proceso padre
             children.append(pid)
 
-    # Mediante su pid, esperamos a que todos los hijos terminen
     for pid in children:
         os.waitpid(pid, 0)
 
