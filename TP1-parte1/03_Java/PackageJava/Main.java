@@ -5,34 +5,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException, InterruptedException {
-        int duracion = Integer.parseInt(args[0]);
-        int intervalo = Integer.parseInt(args[1]);
-        int id = 1;
+  public static void main(String[] args) throws IOException, InterruptedException {
+    int duration = Integer.parseInt(args[0]);
+    int interval = Integer.parseInt(args[1]);
+    int cameraId = 1;
 
-        String[] zonas = {"Sotano", "Atico", "Cocina", "Dormitorio", "Jardin", "Mausoleo"};
+    String[] zones = {"Sotano", "Atico", "Cocina", "Dormitorio", "Jardin", "Mausoleo"};
 
-        List<Process> procesos = new ArrayList<>();
+    List<Process> processes = new ArrayList<>();
 
-        for (String zona : zonas) {
-            ProcessBuilder pb = new ProcessBuilder(
-                "java", "ProgaConcu.CamaraDeVigilancia",
-                String.valueOf(duracion),
-                String.valueOf(intervalo),
-                zona,
-                String.valueOf(id++)
-            );
+    for (String zone : zones) {
+      ProcessBuilder processBuilder =
+          new ProcessBuilder(
+              "java",
+              "PrograConcu.SurveillanceCamera",
+              String.valueOf(duration),
+              String.valueOf(interval),
+              zone,
+              String.valueOf(cameraId++));
 
-            pb.inheritIO(); // para que el output se vea en consola
-            Process p = pb.start();
-            procesos.add(p);
-        }
-
-        // esperar a que todos los procesos terminen
-        for (Process p : procesos) {
-            p.waitFor();
-        }
-
-        System.out.println("Ha finalizado la vigilancia...");
+      processBuilder.inheritIO();
+      Process process = processBuilder.start();
+      processes.add(process);
     }
+
+    for (Process process : processes) {
+      process.waitFor();
+    }
+
+    System.out.println("Ha finalizado la vigilancia...");
+  }
 }
