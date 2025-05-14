@@ -48,7 +48,6 @@ public class League
         Team home = teams.get(homeIndex);
         Team away = teams.get(awayIndex);
 
-        // alternamos partidos visitante y de local
         if (round % 2 == 0 && matchIndex == 0)
         {
           fixture[round][matchIndex] = new Match(away, home);
