@@ -3,12 +3,12 @@ name: GitFlow Branch Protection
 on:
   pull_request:
     branches: 
-        - "*"
+      - '**'  # Correcto para capturar cualquier branch
 
 jobs:
   # Validación para feature/* a develop
   feature-to-develop:
-    if: startsWith(github.head_ref, 'feature/') && github.base_ref == 'develop'
+    if: ${{ startsWith(github.event.pull_request.head.ref, 'feature/') && github.event.pull_request.base.ref == 'develop' }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate PR from feature/* to develop
@@ -16,7 +16,7 @@ jobs:
 
   # Validación para develop a release/*
   develop-to-release:
-    if: github.head_ref == 'develop' && startsWith(github.base_ref, 'release/')
+    if: ${{ github.event.pull_request.head.ref == 'develop' && startsWith(github.event.pull_request.base.ref, 'release/') }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate PR from develop to release/*
@@ -24,7 +24,7 @@ jobs:
 
   # Validación para release/* a main
   release-to-main:
-    if: startsWith(github.head_ref, 'release/') && github.base_ref == 'main'
+    if: ${{ startsWith(github.event.pull_request.head.ref, 'release/') && github.event.pull_request.base.ref == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Validate PR from release/* to main
@@ -34,13 +34,8 @@ jobs:
   invalid-pr:
     needs: [release-to-main, develop-to-release, feature-to-develop]
     runs-on: ubuntu-latest
-    run: |
-          if [[ ${{ github.event.pull_request.head.ref }} == feature/* && ${{ github.event.pull_request.base.ref }} == develop ]] ||
-             [[ ${{ github.event.pull_request.head.ref }} == develop && ${{ github.event.pull_request.base.ref }} == release/* ]] ||
-             [[ ${{ github.event.pull_request.head.ref }} == release/* && ${{ github.event.pull_request.base.ref }} == main ]]; then
-            echo "Valid PR"
-            exit 0
-          else
-            echo "Invalid PR: This PR does not follow the GitFlow branch rules."
-            exit 1
-          fi
+    steps:
+      - name: Check for invalid PR
+        run: |
+          echo "Invalid PR: This PR does not follow the GitFlow branch rules."
+          exit 1
