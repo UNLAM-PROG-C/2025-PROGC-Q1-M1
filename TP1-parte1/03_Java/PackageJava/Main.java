@@ -12,7 +12,8 @@ public class Main
         int interval = Integer.parseInt(args[1]);
         int cameraId = 1;
 
-        String[] zones = {
+        String[] zones = 
+        {
             "Sotano",
             "Atico",
             "Cocina",

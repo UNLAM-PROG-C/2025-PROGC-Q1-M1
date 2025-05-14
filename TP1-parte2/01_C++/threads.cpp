@@ -14,48 +14,60 @@ const int PROBABILITY_RANGE = 100;
 const int CHAKRA_MIN = 5;
 const int CHAKRA_MAX = 10;
 
-struct FinalResult {
+struct FinalResult
+{
     int clones;
     double duration;
     int totalLevel;
 };
 
-int trainClone(int id_clon) {
+int trainClone(int id_clon)
+{
     int chakra = CHAKRA_MIN + rand() % (CHAKRA_MAX - CHAKRA_MIN + 1);
     int level = 0;
-    for (int i = 0; i < chakra; ++i) {
+    for (int i = 0; i < chakra; ++i)
+    {
         int duration = DURATION_MIN_MS + rand() % (DURATION_MAX_MS - DURATION_MIN_MS + 1);
         this_thread::sleep_for(chrono::milliseconds(duration));
-        if (rand() % PROBABILITY_RANGE < SUCCESS_PROBABILITY * PROBABILITY_RANGE) {
+        if (rand() % PROBABILITY_RANGE < SUCCESS_PROBABILITY * PROBABILITY_RANGE)
+        {
             level++;
         }
     }
     return level;
 }
 
-void LaunchThreads(int numClones, vector<int>& levels) {
+void LaunchThreads(int numClones, vector<int>& levels)
+{
     vector<thread> clones;
-    for (int i = 0; i < numClones; ++i) {
-        clones.emplace_back([i, &levels]() {
+    for (int i = 0; i < numClones; ++i)
+    {
+        clones.emplace_back([i, &levels]()
+        {
             levels[i] = trainClone(i);
         });
     }
 
-    for (auto& clone : clones) {
+    for (auto& clone : clones)
+    {
         clone.join();
     }
 }
 
-int CalculateTotalLevel(const vector<int>& levels) {
+int CalculateTotalLevel(const vector<int>& levels)
+{
     int totalLevel = 0;
-    for (int level : levels) {
+    for (int level : levels)
+    {
         totalLevel += level;
     }
     return totalLevel;
 }
 
-void PrintResults(int numClones, const vector<int>& levels, int totalLevel, double duration) {
-    for (int i = 0; i < numClones; ++i) {
+void PrintResults(int numClones, const vector<int>& levels, int totalLevel, double duration)
+{
+    for (int i = 0; i < numClones; ++i)
+    {
         cout << "El clon " << i + 1 << " alcanzó el nivel " << levels[i] << endl;
     }
     cout << "Nivel total alcanzado: " << totalLevel << endl;
@@ -63,15 +75,18 @@ void PrintResults(int numClones, const vector<int>& levels, int totalLevel, doub
     cout << "------------------------------------------" << endl;
 }
 
-void SaveSummaryInCSV(const vector<FinalResult>& results, const string& fileName) {
+void SaveSummaryInCSV(const vector<FinalResult>& results, const string& fileName)
+{
     ofstream file(fileName);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cerr << "Error al abrir el archivo " << fileName << endl;
         return;
     }
 
     file << "Clones,Duracion,NivelTotal\n";
-    for (const auto& res : results) {
+    for (const auto& res : results)
+    {
         file << res.clones << "," << res.duration << "," << res.totalLevel << "\n";
     }
 
@@ -79,10 +94,15 @@ void SaveSummaryInCSV(const vector<FinalResult>& results, const string& fileName
     cout << "Comparativa guardada en " << fileName << endl;
 }
 
-int main() {
-    vector<int> cloneCounts = {5, 10, 20, 40, 60, 70};
+int main()
+{
+    vector<int> cloneCounts =
+    {
+        5, 10, 20, 40, 60, 70
+    };
     vector<FinalResult> summary;
-    for (int numClones : cloneCounts) {
+    for (int numClones : cloneCounts)
+    {
         cout << "\n--- Ejecutando con " << numClones << " clones ---" << endl;
         vector<int> levels(numClones, 0);
         auto startTime = chrono::high_resolution_clock::now();
@@ -93,7 +113,10 @@ int main() {
 
         PrintResults(numClones, levels, totalLevel, duration.count());
 
-        summary.push_back({numClones, duration.count(), totalLevel});
+        summary.push_back(
+        {
+            numClones, duration.count(), totalLevel
+        });
     }
 
     SaveSummaryInCSV(summary, "resumen.csv");
