@@ -76,7 +76,7 @@ public class Main
 		{
 			System.out.println("Richard lleva un auto al estacionamiento.");
 
-			Thread.sleep(TIME); //Simular demora
+			Thread.sleep(TIME);
 
 			parkedCars.put("AUTO");
 
@@ -120,7 +120,7 @@ public class Main
 		{
 			System.out.println("Aaron comienza la inspección del auto.");
 			
-			Thread.sleep(TIME); //Simular demora
+			Thread.sleep(TIME);
 			
 			checkedCars.put("AUTO");
 		}
@@ -191,7 +191,7 @@ public class Main
 		{
 			System.out.println("El asistente " + this.name + " lleva un auto a la fosa.");
 			
-			Thread.sleep(TIME); //Simular demora
+			Thread.sleep(TIME);
 			
 			pitsCars.add("AUTO");
 		}
@@ -200,7 +200,7 @@ public class Main
 		{
 			System.out.println("El asistente " + this.name + " lleva un auto al servicio.");
 			
-			Thread.sleep(TIME); //Simular demora
+			Thread.sleep(TIME);
 		}
 		
 	}
@@ -248,7 +248,7 @@ public class Main
 		{
 			System.out.println("Charles comienza la reparación del auto.");
 			
-			Thread.sleep(TIME); //Simular demora
+			Thread.sleep(TIME);
 			
 			pitsMTX.release();
 			
