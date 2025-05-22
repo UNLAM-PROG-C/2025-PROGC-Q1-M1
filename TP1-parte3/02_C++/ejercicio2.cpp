@@ -38,31 +38,40 @@ random_device rd;
 mt19937 gen(rd());
 uniform_int_distribution<> distClients(MIN_PACKAGES_TO_BUY, MAX_PACKAGES_TO_BUY);
 
-void masterBaker() {
-    while (true) {
+void masterBaker() 
+{
+    while (true) 
+    {
         doughMutex.lock();
-        if (doughOnTable <= MAX_DOUGH_ON_TABLE - MAESTRO_PRODUCES) {
+        if (doughOnTable <= MAX_DOUGH_ON_TABLE - MAESTRO_PRODUCES) 
+        {
             doughOnTable += MAESTRO_PRODUCES;
         }
         doughMutex.unlock();
     }
 }
 
-void assistantBaker() {
-    while (true) {
+void assistantBaker() 
+{
+    while (true) 
+    {
         doughMutex.lock();
-        if (doughOnTable < MAX_DOUGH_ON_TABLE) {
+        if (doughOnTable < MAX_DOUGH_ON_TABLE) 
+        {
             doughOnTable += ASSISTANT_PRODUCES;
         }
         doughMutex.unlock();
     }
 }
 
-void baker() {
-    while (true) {
+void baker() 
+{
+    while (true) 
+    {
         doughMutex.lock();
         basketMutex.lock();
-        if (doughOnTable >= BAKER_CONSUMES && breadInBasket <= MAX_BREAD_IN_BASKET - BAKER_CONSUMES) {
+        if (doughOnTable >= BAKER_CONSUMES && breadInBasket <= MAX_BREAD_IN_BASKET - BAKER_CONSUMES) 
+        {
             doughOnTable -= BAKER_CONSUMES;
             breadInBasket += BAKER_CONSUMES;
         }
@@ -71,12 +80,15 @@ void baker() {
     }
 }
 
-void packer() {
-    while (true) {
+void packer() 
+{
+    while (true) 
+    {
         basketMutex.lock();
         counterMutex.lock();
 
-        if (breadInBasket >= PACKER_CONSUMES && packagesOnCounter < MAX_PACKAGES_ON_COUNTER) {
+        if (breadInBasket >= PACKER_CONSUMES && packagesOnCounter < MAX_PACKAGES_ON_COUNTER) 
+        {
             breadInBasket -= PACKER_CONSUMES;
             packagesOnCounter++;
 
@@ -85,29 +97,35 @@ void packer() {
 
             labelerMutex.lock();
 
-            if (labelersAvailable > 0) {
+            if (labelersAvailable > 0) 
+            {
                 labelersAvailable--;
                 labelerMutex.unlock();
 
                 labelerMutex.lock();
                 labelersAvailable++;
                 labelerMutex.unlock();
-            } else {
+            } else 
+            {
                 labelerMutex.unlock();
             }
-        } else {
+        } else 
+        {
             counterMutex.unlock();
             basketMutex.unlock();
         }
     }
 }
 
-void client() {
+void client() 
+{
     int packagesToBuy = distClients(gen);
     int packagesBought = 0;
-    while (packagesBought < packagesToBuy) {
+    while (packagesBought < packagesToBuy) 
+    {
         counterMutex.lock();
-        if (packagesOnCounter > 0) {
+        if (packagesOnCounter > 0) 
+        {
             packagesOnCounter--;
             counterMutex.unlock();
 
@@ -116,13 +134,15 @@ void client() {
             salesMutex.lock();
             packagesSold++;
             salesMutex.unlock();
-        } else {
+        } else 
+        {
             counterMutex.unlock();
         }
     }
 }
 
-int main() {
+int main() 
+{
     thread t1(masterBaker);
     thread t2(assistantBaker);
     thread t3(baker);
@@ -130,11 +150,13 @@ int main() {
     thread t5(packer);
 
     vector<thread> clients;
-    for (int i = 0; i < NUMBER_OF_CLIENTS; i++) {
+    for (int i = 0; i < NUMBER_OF_CLIENTS; i++) 
+    {
         clients.emplace_back(client);
     }
 
-    for (auto& c : clients) {
+    for (auto& c : clients) 
+    {
         c.join();
     }
 
