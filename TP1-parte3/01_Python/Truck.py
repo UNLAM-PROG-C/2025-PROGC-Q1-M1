@@ -30,7 +30,7 @@ def truck(
                 break
             remaining_trips.value -= 1
             trip_number = total_trips - remaining_trips.value
-            print(f"Camión {truck_id}: realizando viaje #{trip_number}")
+            print(f"Camión {truck_id}: realizando viaje {trip_number}")
 
 
         tapiales_plant.acquire()
