@@ -1,0 +1,279 @@
+[gd_scene load_steps=14 format=3 uid="uid://bcx234o5n2c2g"]
+
+[ext_resource type="Script" uid="uid://mjxnmnf1iafs" path="res://Scripts/Main.gd" id="1_gl6un"]
+[ext_resource type="Texture2D" uid="uid://cam4mv87iqwaw" path="res://Sprites/BackGroundGame.png" id="2_2irst"]
+[ext_resource type="Script" uid="uid://b4rkgfaba3p4h" path="res://Scripts/Board.gd" id="2_j5yw3"]
+[ext_resource type="Texture2D" uid="uid://ckycf3xooft68" path="res://Sprites/BackgroundBoard.png" id="3_7lihs"]
+[ext_resource type="Texture2D" uid="uid://otfmpjpgsau5" path="res://Sprites/Button.png" id="4_2irst"]
+[ext_resource type="Theme" uid="uid://b3thp4lbcuf47" path="res://Themes/ButtonBack.tres" id="5_7lihs"]
+[ext_resource type="FontFile" uid="uid://bf1wvyni0slqf" path="res://Fonts/JosefinSans-Bold.ttf" id="5_bf53h"]
+[ext_resource type="AudioStream" uid="uid://dog331cbyoxrv" path="res://Sounds/game_sound.mp3" id="7_71axn"]
+[ext_resource type="Script" uid="uid://dqx8534mqybbs" path="res://Scripts/ButtonController.gd" id="9_71axn"]
+[ext_resource type="Theme" uid="uid://bnq0c4tcmm3r3" path="res://Themes/ButtonTheme.tres" id="9_bf53h"]
+[ext_resource type="Theme" uid="uid://c8d3qlywhckrx" path="res://Themes/ButtonHelpTheme.tres" id="10_71axn"]
+[ext_resource type="Theme" uid="uid://b737mb2afw3g1" path="res://Themes/ButtonMusicTheme.tres" id="12_3so38"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_71axn"]
+texture = ExtResource("4_2irst")
+region_rect = Rect2(85.4592, 338.349, 853.106, 346.651)
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_gl6un")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_2irst")
+expand_mode = 2
+
+[node name="BackgroundBoard" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_7lihs")
+stretch_mode = 3
+
+[node name="PopUpCongratulations" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_2irst")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="PopUpCongratulations"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 20
+theme_override_fonts/font = ExtResource("5_bf53h")
+theme_override_font_sizes/font_size = 60
+text = "¡Felicidades!
+Has superado este nivel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer"]
+layout_mode = 2
+columns = 8
+
+[node name="Board" type="Node" parent="."]
+script = ExtResource("2_j5yw3")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="Board"]
+stream = ExtResource("7_71axn")
+volume_db = -3.0
+
+[node name="HTTPRequest" type="HTTPRequest" parent="Board"]
+
+[node name="BackButton" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -90.0
+offset_top = -90.0
+offset_right = -30.0
+offset_bottom = -30.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_constants/separation = 25
+
+[node name="Back" type="Button" parent="BackButton"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("5_7lihs")
+theme_override_font_sizes/font_size = 40
+
+[node name="UndoButton" type="Button" parent="." node_paths=PackedStringArray("target_label")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = -96.0
+offset_right = 223.0
+offset_bottom = -33.0
+grow_vertical = 0
+theme = ExtResource("9_bf53h")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_71axn")
+script = ExtResource("9_71axn")
+target_label = NodePath("Label")
+
+[node name="Label" type="Label" parent="UndoButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 40
+text = "Delete"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_top = 14.0
+offset_right = 40.0
+offset_bottom = 56.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+text = "00:00"
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="HelpButton" type="Button" parent="."]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 1183.0
+offset_top = 526.0
+offset_right = 1255.0
+offset_bottom = 599.0
+size_flags_horizontal = 8
+theme = ExtResource("10_71axn")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+
+[node name="MusicButton" type="Button" parent="."]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+offset_left = 1182.0
+offset_top = 430.0
+offset_right = 1255.0
+offset_bottom = 503.0
+size_flags_horizontal = 8
+theme = ExtResource("12_3so38")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 40
+
+[node name="HelpPopUp" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(634, 330)
+scale = Vector2(1.28418, 1.61279)
+texture = ExtResource("4_2irst")
+
+[node name="Instrucciones" type="Label" parent="HelpPopUp"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -877.214
+offset_top = -675.071
+offset_right = -103.214
+offset_bottom = -369.071
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("5_bf53h")
+theme_override_font_sizes/font_size = 17
+text = "● El objetivo es tener exactamente una corona en cada fila, columna y región de color.
+
+● Clic izquierdo para colocar una corona. Otro clic para quitarla.
+
+● Clic derecho para colocar una X. Usa X para marcar donde no debe colocarse una corona.
+
+● Las coronas no pueden tocarse, ni siquiera en diagonal."
+vertical_alignment = 1
+
+[node name="Titulo" type="Label" parent="HelpPopUp"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -903.69
+offset_top = -680.031
+offset_right = -129.69
+offset_bottom = -571.031
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("5_bf53h")
+theme_override_font_sizes/font_size = 20
+text = "Cómo jugar"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="HelpPopUp" node_paths=PackedStringArray("target_label")]
+offset_left = -71.6411
+offset_top = 86.8059
+offset_right = 60.3589
+offset_bottom = 122.806
+theme = ExtResource("9_bf53h")
+script = ExtResource("9_71axn")
+target_label = NodePath("Label")
+
+[node name="Label" type="Label" parent="HelpPopUp/ContinueButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 20
+text = "Continue"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="mouse_entered" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="BackButton/Back" to="BackButton/Back" method="_on_mouse_exited"]
+[connection signal="pressed" from="BackButton/Back" to="." method="_on_back_pressed"]
+[connection signal="mouse_entered" from="UndoButton" to="UndoButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="UndoButton" to="UndoButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="UndoButton" to="." method="_on_undo_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="HelpButton" to="." method="_on_help_pressed"]
+[connection signal="pressed" from="MusicButton" to="." method="_on_music_button_pressed"]
+[connection signal="mouse_entered" from="HelpPopUp/ContinueButton" to="HelpPopUp/ContinueButton" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="HelpPopUp/ContinueButton" to="HelpPopUp/ContinueButton" method="_on_mouse_exited"]
+[connection signal="pressed" from="HelpPopUp/ContinueButton" to="." method="_on_continue_button_pressed"]
